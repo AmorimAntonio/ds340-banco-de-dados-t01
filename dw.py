@@ -3,10 +3,15 @@ Requisitos:
     pip install pyodbc pymysql pandas
 """
 
+import os
 import pyodbc
 import pymysql
 import pandas as pd
 from itertools import combinations
+from dotenv import load_dotenv
+
+# Carrega as variáveis definidas no .env para a memória do Python
+load_dotenv()
 
 # ----------------------------------------------------------------------
 # 1. conexões
@@ -14,19 +19,21 @@ from itertools import combinations
 # ----------------------------------------------------------------------
 
 def conectar_origem():
+    server = os.getenv("DB_ORIGEM_SERVER", r"localhost\SQLEXPRESS")
+    database = os.getenv("DB_ORIGEM_DATABASE", "ADS")
     return pyodbc.connect(
-        "DRIVER={ODBC Driver 17 for SQL Server};"
-        "SERVER=localhost\\SQLEXPRESS;" 
-        "DATABASE=ADS;"
-        "Trusted_Connection=yes;"
+        f"DRIVER={{ODBC Driver 17 for SQL Server}};"
+        f"SERVER={server};" 
+        f"DATABASE={database};"
+        f"Trusted_Connection=yes;"
     )
 
 def conectar_destino():
     return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="6767",
-        database="dw_vendas",
+        host=os.getenv("DB_DESTINO_HOST", "localhost"),
+        user=os.getenv("DB_DESTINO_USER", "root"),
+        password=os.getenv("DB_DESTINO_PASSWORD"),
+        database=os.getenv("DB_DESTINO_DATABASE", "dw_vendas"),
         autocommit=False, # pra só salvar os dados se n tiver erro
     )
 
