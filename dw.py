@@ -11,7 +11,7 @@ from itertools import combinations
 from dotenv import load_dotenv
 
 # Carrega as variáveis definidas no .env para a memória do Python
-load_dotenv()
+load_dotenv() 
 
 # ----------------------------------------------------------------------
 # 1. conexões
